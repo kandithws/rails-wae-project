@@ -1,0 +1,39 @@
+<!-- template credit https://bootsnipp.com/snippets/featured/user-comment-example -->
+<!-- Fixed instance var name -->
+<div class="row">
+  <div class="col-sm-1">
+    <div class="thumbnail">
+      <% if comment.user.avatar.exists? %>
+          <%= image_tag comment.user.avatar.url(:thumb), class: "img-responsive user-photo" %>
+      <% else %>
+          <%= image_tag image_path("missing.png"), class: "img-responsive user-photo" %>
+      <% end %>
+    </div><!-- /thumbnail -->
+  </div><!-- /col-sm-1 -->
+
+  <div class="col-sm-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong><%= link_to comment.user.username, postuser_path(comment.user) %></strong>
+        <span class="text-muted pull-right"><%= distance_of_time_in_words_to_now(comment.created_at) %></span>
+        <% if current_user.id == comment.user.id %>
+            <%= link_to comment, method: :delete, :data => {:confirm => 'Are you sure?'} do %>
+                <i class="glyphicon glyphicon-remove pull-right" style="color: red"><strong>Delete</strong></i>
+            <% end %>
+        <% end %>
+      </div>
+      <div class="panel-body">
+        <div>
+          <%= best_in_place_if (current_user.id == comment.user.id), comment, :body,
+                               :as => :textarea, :ok_button => 'Edit', ok_button_class: 'btn btn-primary',
+                               :cancel_button => 'Cancel', cancel_button_class: 'btn' %>
+        </div>
+        <div class="pull-right">
+          <% if current_user.id == comment.user.id %>
+              <p style="color: #b9b9b9">double click to edit ...</p>
+          <% end %>
+        </div>
+      </div><!-- /panel-body -->
+    </div><!-- /panel panel-default -->
+  </div><!-- /col-sm-5 -->
+</div>

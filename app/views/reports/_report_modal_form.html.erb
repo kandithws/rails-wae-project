@@ -1,0 +1,10 @@
+<!-- Input reportable: either type User or Item -->
+<%= simple_form_for [reportable, reportable.report_from_others.build], html: {role: :form, 'data-model' => 'report'} do |f| %>
+    <div class="form-group">
+      <%= f.label :reason, class: 'control-label' %><br>
+      <%= f.text_area :reason, class: 'form-control' %>
+    </div>
+    <div class="actions">
+      <%= f.button :submit, class: 'btn btn-default', id: 'report_submit' %>
+    </div>
+<% end %>

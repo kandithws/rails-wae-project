@@ -1,0 +1,185 @@
+<%= nested_form_for(@item) do |form| %>
+    <% if @item.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+          <ul>
+            <% @item.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= form.label :title %>
+      <%= form.text_field :title, id: :item_title, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :body %>
+      <%= form.text_area :body, id: :item_body, size: 20, maxlength: 40, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <!-- https://stackoverflow.com/questions/41798511/how-to-dropdown-select-in-rails-form -->
+      <%= label_tag :category %>
+      <%= form.select :category_id, @current_categories.collect {|c| [c.name, c.id]},
+                      id: :item_category_id,
+                      selected: (@item.category.id unless @item.category.nil?), class: "form-control" %>
+    </div>
+
+    <div class="form-group" id='select'>
+      <!-- https://stackoverflow.com/questions/41798511/how-to-dropdown-select-in-rails-form -->
+      <%= label_tag :type %>
+      <%= form.select :type, [["BidItem", "BidItem"],
+                              ["NonBidItem", "NonBidItem"]],
+                      id: :item_type,
+                      selected: (@item.type unless @item.type.nil?),
+                      class: "form-control" %>
+      <a id="tip_type" class="glyphicon glyphicon-info-sign" title="Select your item type
+      whether it will be selling/buying at the fix price (NonBidItem), or going through bidding process (BidItem)"></a>
+    </div>
+
+    <div class="form-group" id="bidding_deadline" >
+      <%= label_tag 'Bidding Deadline (UTC +07:00)' %> <a id="tip_deadline" class="glyphicon glyphicon-info-sign" title="Must be at least 1 minute from now"></a>
+      <div class='input-group date' id='datetimepicker1'>
+        <% if !@item.bid_end_time.nil? %>
+            <%= text_field_tag :bid_end_time, @item.bid_end_time.localtime.strftime('%m/%d/%Y %I:%M %p'), id: :item_bid_end_time, class: "form-control" %>
+        <% else %>
+            <%= text_field_tag :bid_end_time, DateTime.now.strftime('%m/%d/%Y %I:%M %p') , id: :item_bid_end_time, class: "form-control" %>
+        <% end %>
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <!-- https://stackoverflow.com/questions/41798511/how-to-dropdown-select-in-rails-form -->
+      <%= label_tag :sell_type, "Selling/Buying" %>
+      <a id="tip_sell" class="glyphicon glyphicon-info-sign" title="'Selling' if you want to sell something or 'Buying' if you want to request from others"></a>
+      <%= select_tag :sell_type, options_for_select(["Sell", "Buy"], selected: (@item.sell_type ? "Sell" : "Buy")), class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :product_name %>
+      <%= form.text_field :product_name, id: :item_product_name, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :product_price, id: "product_price_label" %>
+      <a id="tip_price" class="glyphicon glyphicon-info-sign" title="For Non-bidding Item:
+      the price will be the fix price to buy or sell   For Bidding Item: It will be minimum initial price for Selling, and maximum initial price for Buying "></a>
+      <%= form.text_field :product_price, id: :item_product_price, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :product_desc, "Product description" %>
+      <%= form.text_area :product_desc, id: :item_product_desc, :size => 20, :maxlength => 40, class: "form-control" %>
+    </div>
+
+    <div>
+      <!--https://stackoverflow.com/questions/6199879/deleting-images-with-paperclip -->
+      <% if @item.images.count > 0 %>
+          <% @item.images.each do |img| %>
+              <%= form.fields_for :images, img do |image_fields| %>
+                  <%= image_tag img.content.url(:thumb), class: "img-responsive property-images" %>
+                  <%= label_tag 'Delete' %>
+                  <%= image_fields.check_box :_destroy %>
+                  <!-- =label_tag 'Delete'%>< check_box_tag "images[]", img.id -->
+              <% end %>
+          <% end %>
+      <% end %>
+    </div>
+
+    <div class="file_field">
+      <!-- https://stackoverflow.com/questions/17175850/rails-fields-for-form-not-showing-up-nested-form -->
+      <%= form.label "Upload Image" %>
+      <%= form.fields_for :images, Image.new do |image_fields| %>
+          <%= image_fields.file_field :content %>
+          <%= image_fields.link_to_remove 'Remove this image' %>
+      <% end %>
+
+      <%= form.link_to_add 'Add more image', :images %>
+
+    </div>
+
+    <div class="form-group">
+      <%= label_tag 'product_reference_url(optional)' %>
+      <%= form.text_field :product_ref_url, id: :item_product_ref_url, class: "form-control" %>
+    </div>
+
+
+    <div class="actions">
+      <%= form.submit %>
+    </div>
+<% end %>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+        $('#tip_type').tooltip();
+        $('#tip_deadline').tooltip();
+        $('#tip_price').tooltip();
+        $('#tip_sell').tooltip();
+        if ($('#non_bid_item_type').length){
+            var selected = $('#non_bid_item_type option:selected').text();
+            if (selected == "BidItem"){
+                $('#bidding_deadline').show();
+            }
+            else{
+                $('#bidding_deadline').hide();
+            }
+        }
+        else if ($('#bid_item_type').length)  {
+            var selected = $('#bid_item_type option:selected').text();
+            if (selected == "BidItem"){
+                $('#bidding_deadline').show();
+            }
+            else{
+                $('#bidding_deadline').hide();
+            }
+        }
+        else {
+            var selected = $('#item_type option:selected').text();
+            if (selected == "BidItem"){
+                $('#bidding_deadline').show();
+            }
+            else{
+                $('#bidding_deadline').hide();
+            }
+        }
+    });
+
+    $('#non_bid_item_type').change(function () {
+        var selected = $('#non_bid_item_type option:selected').text();
+        if (selected == "BidItem"){
+            $('#bidding_deadline').show();
+        }
+        else{
+            $('#bidding_deadline').hide();
+        }
+    });
+
+    $('#bid_item_type').change(function () {
+        var selected = $('#bid_item_type option:selected').text();
+        if (selected == "BidItem"){
+            $('#bidding_deadline').show();
+        }
+        else{
+            $('#bidding_deadline').hide();
+        }
+    });
+
+    $('#item_type').change(function () {
+        var selected = $('#item_type option:selected').text();
+        if (selected == "BidItem"){
+            $('#bidding_deadline').show();
+        }
+        else{
+            $('#bidding_deadline').hide();
+        }
+    });
+
+</script>

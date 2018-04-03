@@ -1,0 +1,10 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  reason: MyText
+  reportable: one (Item)
+#
+#two:
+#  user: two
+#  reason: MyText

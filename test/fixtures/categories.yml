@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: "dummy_test"
+  desc: "dummy cat to test"
+#
+two:
+  name: "gadgets_test"
+  desc: "gadgets cat to test"

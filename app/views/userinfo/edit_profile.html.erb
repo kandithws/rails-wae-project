@@ -1,0 +1,91 @@
+<!--TODO :https://bootsnipp.com/snippets/86dXW -->
+<%= form_for @user, :url => update_profile_path(@user) do |f| %>
+
+    <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <table class="table">
+      <tr><h4>Edit Details</h4></tr>
+      <tr>
+        <td>
+          <div class="field">
+            <%= f.label :username %>
+            <%= f.text_field :username %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="field">
+            <%= f.label :first_Name %>
+            <%= f.text_field :first_name %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="field">
+            <%= f.label :Last_Name %>
+            <%= f.text_field :last_name %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="field">
+            <%= f.label :email %>
+            <%= f.text_field :email, readonly: !@user.admin?, style: 'background-color: #E7E7E7;' %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="field">
+            <%= f.label :cell_phone_no %>
+            <%= f.text_field :cell_phone_no %>
+          </div>
+      </tr>
+
+      <tr>
+        <td>
+          <% if @user.avatar.exists? %>
+          <%= image_tag @user.avatar.url(:thumb), class: "img-responsive property-images" %>
+          <% end %>
+        </td>
+        <td>
+          <div class="field">
+            <%= f.label :avatar %>
+            <%= f.file_field :avatar %>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div class="field">
+            <%= f.label :profession %>
+          <%= f.select :profession, options_for_select(["Student", "Staff",'Faculty'], selected: @user.profession) %>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div class="actions">
+            <%= f.submit %>
+          </div>
+        </td>
+      </tr>
+    </table>
+<% end %>
+
+

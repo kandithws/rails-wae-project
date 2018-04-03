@@ -1,0 +1,27 @@
+<ul class="hmenu">
+  <% if user_signed_in? %>
+      <div class="alert alert-info">
+        <strong>Welcome <%= current_user.username %>!</strong>
+      </div>
+  <% end %>
+</ul>
+
+
+</br>
+
+<div class="container">
+  <div class="jumbotron" style="background-color: black;">
+    <h2 style="color: floralwhite;">Today's Items</h2>
+  </div>
+</div>
+
+<%= link_to "Post Your new Item", new_item_path, class: "btn btn-primary btn-lg" %></br>
+<div id="items" style="display: block">
+  <h2>Non Biding Item for Today</h2>
+  <%= render 'items/item_list_table_index', table_id: 'non-bidding', items: @non_bid_items %>
+  <h2>Biding Item for Today</h2>
+  <%= render 'items/item_list_table_index', table_id: 'bidding', items: @bid_items %>
+</div>
+
+
+

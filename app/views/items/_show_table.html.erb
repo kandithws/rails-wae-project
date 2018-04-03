@@ -1,0 +1,53 @@
+<div class="col-md-10">
+  <table class="table-striped table-bordered table-responsive">
+    <tbody>
+    <tr>
+      <th scope="row">Title</th>
+      <td><%= @item.title %></td>
+    </tr>
+    <tr>
+      <th scope="row">Type</th>
+      <td><%= @item.type %></td>
+    </tr>
+    <tr>
+      <th scope="row">Body</th>
+      <td><%= @item.body %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Owner</th>
+      <td><%= @item.user.first_name + @item.user.last_name %></td>
+    </tr>
+    <tr>
+      <th scope="row">Contact</th>
+      <td><%= @item.user.cell_phone_no %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Category</th>
+      <td><%= @item.category.name %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Product Name</th>
+      <td><%= @item.product_name %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Product Descrption</th>
+      <td><%= @item.product_desc %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Product Refernce URL</th>
+      <td><%= @item.product_ref_url ? "[NONE]" : link_to(@item.product_ref_url, @item.product_ref_url)  %></td>
+    </tr>
+
+    <tr>
+      <th scope="row">Product <%= @item.price_msg %> Price</th>
+      <td><%= @item.product_price %></td>
+    </tr>
+
+    </tbody>
+  </table>
+</div>

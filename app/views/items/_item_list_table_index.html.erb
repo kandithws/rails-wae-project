@@ -1,0 +1,66 @@
+<!-- IN: table_id (string), items (active record array of items) -->
+<table class="table-striped" id=<%= table_id %>>
+  <% count = 1 %>
+  <tbody>
+  <% items.each do |item| %>
+      <tr>
+        <td>
+          <div class="row">
+            <div class="col-xs-12 col-sm-3 col-md-3">
+              <% if item.images.size > 0 %>
+                  <%= link_to image_tag(item.images[0].content.url(:medium), class: "img-responsive img-box img-thumbnail"), item_path(item) %>
+              <% else %>
+                  <%= link_to image_tag(image_path("item_missing.png"), class: "img-responsive img-box img-thumbnail"), item_path(item) %>
+              <% end %>
+            </div>
+            <div class="col-xs-12 col-sm-9 col-md-9">
+              <div class="pull-right">
+                <% if item.is_non_bid_item? %>
+                    <% if !item.close_deal %>
+                        <span class="label label-success pull-right marginBottom10">On Dealing</span>
+                    <% else %>
+                        <span class="label label-danger pull-right marginBottom10">Deal Closed</span>
+                    <% end %>
+                <% else %>
+                    <% if !item.is_bidding_end? %>
+                        <span class="label label-success pull-right marginBottom10">On Dealing</span>
+                    <% else %>
+                        <span class="label label-danger pull-right marginBottom10">Deal Closed</span>
+                    <% end %>
+                <% end %>
+                <span class="label label-primary pull-right marginBottom10 marginRight1"><%= item.type %></span>
+                <span class="label label-default pull-right marginBottom10"><%= item.sell_type ? "SELL" : "BUY" %></span>
+              </div>
+
+              <div class="list-group">
+                <div class="list-group-item">
+                  <div class="row-picture">
+                      <%= link_to image_tag(item.user.avatar.url(:thumb), class: "circle img-thumbnail img-box", alt: "sintret"), postuser_path(item.user) %>
+                  </div>
+                  <div class="row-content">
+                    <div class="list-group-item-heading">
+                      <%= link_to item.title, item_path(item) %>
+                    </div>
+                    <small>
+                      <i class="glyphicon glyphicon-time"></i> <%= distance_of_time_in_words_to_now(item.created_at) %>
+                      ago by
+                      <%= link_to item.user.username, postuser_path(item.user) %>
+                      <br>
+                      <i class="glyphicon glyphicon glyphicon-thumbs-up"></i><span><a style="color: green;"> Liked by <%= item.likes.count %>
+                      users </a></span>
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <p style="font-size:20px"><strong> Product: <%= item.product_name %></strong></p>
+              <p style="font-size:20px"><strong> <%= item.price_msg %> Price: <%= item.product_price %> ฿</strong></p>
+
+            </div>
+          </div>
+        </td>
+      </tr>
+      <% count += 1 %>
+  <% end %>
+  </tbody>
+
+</table>

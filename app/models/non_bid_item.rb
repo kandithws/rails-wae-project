@@ -1,0 +1,3 @@
+class NonBidItem < Item
+
+end

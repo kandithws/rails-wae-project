@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-sm-1">
+    <div class="thumbnail">
+      <% if current_user.avatar.exists? %>
+          <%= image_tag current_user.avatar.url(:thumb), class: "img-responsive user-photo" %>
+      <% else %>
+          <%= image_tag image_path("missing.png"), class: "img-responsive user-photo" %>
+      <% end %>
+    </div><!-- /thumbnail -->
+  </div><!-- /col-sm-1 -->
+
+  <div class="col-sm-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong><%= current_user.username %></strong>
+      </div>
+      <div class="panel-body">
+        <!-- Nested attributes form -->
+        <%= simple_form_for [item, item.comments.build] do |f| %>
+            <div>
+              <%= f.text_area :body, placeholder: 'comment something ...', cols: 50, rows: 5 %>
+            </div>
+            <div class="pull-right">
+              <%= f.button :submit %>
+            </div>
+        <% end %>
+      </div><!-- /panel-body -->
+    </div><!-- /panel panel-default -->
+  </div><!-- /col-sm-5 -->
+</div>

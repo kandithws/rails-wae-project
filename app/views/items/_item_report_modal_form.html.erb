@@ -1,0 +1,27 @@
+<%# Bootstrap modal markup. @see: http://getbootstrap.com/javascript/#modals %>
+<div class="modal fade" id="report_post_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Report This Item</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'reports/report_modal_form', reportable: @item %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+//    $('#report_submit').click(function() {
+//        $('#report_post_modal').modal('toggle');
+//        alert('Report sent!');
+//        // refresh this page to turn off
+//        // TODO -- We need to get the real feedback from reports controller
+//        location.reload();
+//    });
+</script>

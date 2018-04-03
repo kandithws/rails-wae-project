@@ -1,0 +1,8 @@
+<%= simple_form_for(bid_info) do |f| %>
+    <%= f.error_notification %>
+
+    <div class="form-group">
+      <%= label_tag 'Raise new bid price' %> <%= f.text_field :bid_price %>
+      <%= f.button :submit, data: {disable_with: 'Bidding Expires'}%>
+    </div>
+<% end %>

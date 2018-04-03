@@ -1,0 +1,17 @@
+<%= link_to 'Back',root_path %>
+<% if (@posts) %>
+    <% if (@posts.empty?) %>
+        <div class="alert alert-warning">
+          <strong>No product found. </strong>
+        </div>
+
+    <% else %>
+        <div class="alert alert-success">
+          <strong> <%= @posts.count %> </strong> Item(s) found from searching for <strong>"<%= @q %>" </strong>
+        </div>
+        <%= render 'items/items_list_table', table_id: "my-item", items: @posts %>
+    <% end %>
+<% elsif params[:search].blank? %>
+    <p>Use the search form to search for product.</p>
+<% else %>
+<% end %>

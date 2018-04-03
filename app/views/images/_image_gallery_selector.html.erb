@@ -1,0 +1,18 @@
+<% if images.size > 0 %>
+<div class="carousel slide article-slide">
+  <ol class="carousel-indicators">
+    <li class="active" data-slide-to="0" data-target="#article-photo-carousel">
+      <%= image_tag(images[0].content.url(:thumb), alt: "") %>
+    </li>
+
+    <% count = 1 %>
+    <% images[1..-1].each do |img| %>
+        <li class="" data-slide-to=<%= count %> data-target="#article-photo-carousel">
+          <%= image_tag(img.content.url(:thumb), alt: "") %>
+        </li>
+        <% count += 1 %>
+    <% end %>
+  </ol>
+</div>
+
+<% end %>

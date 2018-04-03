@@ -1,0 +1,46 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  type: NonBidItem
+  view_count: 1
+  body: MyText
+  sell_type: false
+  product_name: MyString
+  product_desc: MyText
+  product_ref_url: MyString
+  product_price: 9.99
+  user: one
+  category: one
+#
+one_close_deal:
+  title: MyString121212
+  type: NonBidItem
+  view_count: 1
+  body: MyText
+  sell_type: false
+  product_name: MyString121221
+  product_desc: MyText
+  product_ref_url: MyString
+  product_price: 9.99
+  sell_type: true
+  close_deal: true
+  user: one
+  category: one
+
+
+one_bid:
+  title: MyString1111
+  type: BidItem
+  view_count: 1
+  body: MyText
+  sell_type: false
+  product_name: MyString1111
+  product_desc: MyText
+  product_ref_url: MyString
+  product_price: 9.99
+  sell_type: true
+  close_deal: true
+  user: one
+  category: one
+  bid_end_time: <%= (DateTime.now + (20*60) ) .to_s(:db) %>

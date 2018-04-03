@@ -1,0 +1,10 @@
+MetricFu.report_name = 'code_metrics'
+
+MetricFu.configuration.configure_metrics.each do |metric|
+  # TODO -- Still fails with :flog, :reek, :churn
+  if [:cane, :flay, :roodi, :saikuro, :rails_best_practices].include?(metric.name)
+    metric.enabled = true
+  else
+    metric.enabled = false
+  end
+end

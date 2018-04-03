@@ -1,0 +1,149 @@
+<!-- report popup http://ericlondon.com/2014/03/13/rails-4-submit-modal-form-via-ajax-and-render-js-response-as-table-row.html -->
+<div class="row">
+</div>
+</br>
+<div class="row" style="margin-right: 100px">
+  <div class="col-xs-4">
+    <%= render 'images/images_gallery', images: @item.images %>
+  </div>
+  <div class="col-xs-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 style="font-weight: bold"><%= @item.title %>
+          <% if !@item.close_deal %>
+              <span class="label label-success pull-right marginBottom10">On Dealing</span>
+          <% else %>
+              <span class="label label-danger pull-right marginBottom10">Deal Closed</span>
+          <% end %>
+
+          <span class="label label-primary pull-right marginBottom10 marginRight1"><%= @item.type %></span>
+          <span class="label label-default pull-right marginBottom10"><%= @item.sell_type ? "SELL" : "BUY" %></span>
+        </h3>
+
+      </div>
+      <div class="panel-body">
+        <!--Boostrap template: https://bootsnipp.com/snippets/featured/blog-post-cms -->
+        <div class="col-md-20 blogShort">
+          <!-- https://stackoverflow.com/questions/27476734/ruby-image-tag-printing-entire-record-of-image-onscreen -->
+          <% #- @item.images.each do |img| %>
+          <% # image_tag(img.content.url(:thumb), class: 'pull-left img-responsive thumb margin10 img-thumbnail') %>
+          <% # end %>
+          <%= render 'show_table' %>
+          <% if @item.user_id == current_user.id %>
+              <div class="pull-right marginBottom10 btn-group btn-group-sm">
+
+                <%= link_to 'Edit Item', edit_item_path(@item), class: "btn btn-warning" %>
+                <!-- <= link_to 'CLOSE THIS DEAL', '#', class: "btn btn-blog", onclick: 'item_js.closeDeal();' > -->
+                <!-- https://stackoverflow.com/questions/16668949/how-to-add-confirm-message-with-link-to-ruby-on-rails -->
+                <% if !@item.close_deal && @item.is_non_bid_item? %>
+                    <%= link_to 'Close This Deal', item_path({id: @item.id, item: {close_deal: true}}),
+                                :data => {:confirm => 'Are you sure?'}, method: :put, class: "btn" %>
+                <% end %>
+
+                <%= link_to 'Delete Item', item_path(@item), method: :delete,
+                            :data => {:confirm => 'Are you sure?'},
+                            class: "btn btn-danger" %>
+              </div>
+          <% else %>
+              <!-- For owner : can report -->
+              <% unless @item.is_reported_by?(current_user) %>
+                  <%# Added Bootstrap data modal attribute %>
+                  <%= render 'item_report_modal_form' %>
+                  <%= link_to 'Report This Post', '#report_post_modal', 'data-toggle' => 'modal' %>
+              <% end %>
+
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <i class="glyphicon glyphicon glyphicon-thumbs-up"></i>
+        <span class="likes-count" data-id="<%= @item.id %>">
+        <%= @item.likes.size %>
+      </span>
+        users like this
+        <% if @item.is_liked_by? current_user %>
+            <%= link_to "Unlike", item_unlike_path(@item),
+                        class: 'like', method: :put, remote: true,
+                        data: {toggle_text: 'Like', toggle_href: item_like_path(@item), id: @item.id} %>
+        <% else %>
+            <%= link_to "Like", item_like_path(@item),
+                        class: 'like', method: :put, remote: true,
+                        data: {toggle_text: 'Unlike', toggle_href: item_unlike_path(@item), id: @item.id} %>
+        <% end %>
+      </div>
+    </div>
+    <div class="pull-right">
+      <p>views: <%= @item.view_count %></p>
+    </div>
+  </div>
+</div>
+</br>
+<div class="row">
+  <div class="col-xs-12">
+    <%= render 'images/image_gallery_selector', images: @item.images %>
+  </div>
+</div>
+
+<% if @item.is_bid_item? %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-4">
+                <h3 style="font-weight: bold">Bidding Table</h3>
+              </div>
+              <div class="col-xs-offset-6 col-xs-2">
+                Deadline <%= @item.bid_end_time.localtime.strftime("%B %d, %Y %I:%M:%S") %>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">
+
+            <div class="row" style="margin-bottom: 20px; margin-top: 20px">
+              <div class="col-md-offset-2 col-md-2">
+                <strong>Time to Bidding Deadline</strong>
+              </div>
+              <div class="col-md-4 countdown" data-until="<%= @item.bid_end_time.localtime.to_s %>" data-outformat="%D-%H:%M:%S"></div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12">
+                <%= render 'bid_infos/show_bid_info_table' %>
+              </div>
+            </div>
+            <div class="container" id="bid_info_form">
+              <% if !@item.is_bidding_end? && !@item.close_deal %>
+                  <% if @current_user_bid_info.nil? %>
+                      <% # new %>
+                      <%= render 'item_bid_info_form', item: @item %>
+                  <% else %>
+                      <% # edit %>
+                      <%= render 'bid_infos/form', bid_info: @current_user_bid_info %>
+                  <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<% end %>
+
+
+<h2> Comments </h2>
+<div class="row">
+  <!-- TODO EDIT and Delete -->
+  <% @comments.each do |c| %>
+      <%= render 'comments/show', comment: c %>
+  <% end %>
+</div>
+
+<div class="row">
+  <%= render 'item_comment_form', item: @item %>
+</div>
+
+
+<%= link_to 'Back', root_path %>

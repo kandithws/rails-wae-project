@@ -1,0 +1,7 @@
+<%= simple_form_for [item, item.bid_infos.build] do |f| %>
+    <%= f.error_notification %>
+
+    <div class="form-group">
+      <%= label_tag 'Raise new bid price' %> <%= f.text_field :bid_price %> <%= f.button :submit %>
+    </div>
+<% end %>

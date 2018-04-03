@@ -1,0 +1,68 @@
+<!-- TODO: https://bootsnipp.com/snippets/featured/simple-user-profile -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-5  toppad  pull-right col-md-offset-3 ">
+      <%= link_to edit_profile_path(user), class: "btn btn-sm btn-warning" do %>
+          <i class="glyphicon glyphicon-edit"></i> Edit your profile
+      <% end %>
+      <br>
+      <p class=" text-info">Joined: <%= user.created_at %></p>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= user.first_name + ' ' + user.last_name %></h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-3 col-lg-3 " align="center">
+              <% if user.avatar.exists? %>
+                  <%= image_tag user.avatar.url(:thumb), class: "img-responsive property-images" %>
+                  <% else %>
+                  <%= image_tag image_path("missing.png"), class: "img-responsive property-images" %>
+              <% end %>
+            </div>
+
+            <div class=" col-md-9 col-lg-9 ">
+              <table class="table table-user-information">
+                <tbody>
+                <tr>
+                  <td><strong>Username:</strong><%= user.username %></td>
+                </tr>
+                <tr>
+                  <td><strong>First Name:</strong><%= user.first_name %></td>
+                </tr>
+                <tr>
+                  <td><strong>Last Name:</strong><%= user.last_name %></td>
+                </tr>
+                <tr>
+                  <td><strong>Email:</strong><%= user.email %></td>
+                </tr>
+                <tr>
+                  <td><strong>Profession:</strong><%= user.profession %></td>
+                </tr>
+                <tr>
+                  <td><strong>Contact no:</strong><%= user.cell_phone_no %></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<h3>My Posted Items </h3>
+<%= render 'items/items_list_table', table_id: "my-item", items: user.items %>
+
+
+
+
+
+

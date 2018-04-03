@@ -1,0 +1,38 @@
+<!-- input images -->
+<% if images.size > 0 %>
+
+    <div class="carousel slide article-slide" id="article-photo-carousel">
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner cont-slider">
+
+        <div class="item active">
+          <%= image_tag(images[0].content.url(:medium), alt: "", title: "", style: 'width: 300px; height: 300px') %>
+        </div>
+
+        <% images[1..-1].each do |img| %>
+            <div class="item">
+              <%= image_tag(img.content.url(:medium), alt: "", title: "", style: 'width: 300px; height: 300px') %>
+            </div>
+        <% end %>
+      </div>
+
+      <!--
+      <ol class="carousel-indicators">
+
+        <li class="active" data-slide-to="0" data-target="#article-photo-carousel">
+          <%= image_tag(images[0].content.url(:thumb), alt: "") %>
+        </li>
+
+        <% count = 1 %>
+        <% images[1..-1].each do |img| %>
+            <li class="" data-slide-to=<%= count %> data-target="#article-photo-carousel">
+              <%= image_tag(img.content.url(:thumb), alt: "") %>
+            </li>
+            <% count += 1 %>
+        <% end %>
+      </ol>
+      -->
+    </div>
+<% else %>
+    <%= image_tag(image_path("item_missing.png"), alt: "", title: "", style: 'width: 300px; height: 300px') %>
+<% end %>
